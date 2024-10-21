@@ -42,3 +42,44 @@ Debes crear una clase abstracta y dos clases hijas:
 	- Implementa manejo de excepciones para errores comunes como `CuentaNoEncontrada`, `SaldoInsuficiente`, y `TransacciónNoPermitida`.
 
 **Nota:** Al igual que los talleres, el reto debe entregarse por medio de la estrategia establecida para la formación, por medio de un Pull Request desde el repositorio Fork hacia la rama main del repositorio del reto.
+
+
+
+## Solución
+1. Creación bases de datos:
+-- Crear tabla cuenta
+CREATE TABLE cuenta (
+    id SERIAL PRIMARY KEY,
+    saldo NUMERIC(15, 2) NOT NULL,
+    numero_cuenta VARCHAR(20) NOT NULL,
+    tipo_cuenta VARCHAR(10) NOT NULL
+);
+
+-- Crear tabla transaccion
+CREATE TABLE transaccion (
+    id SERIAL PRIMARY KEY,
+    tipo VARCHAR(50) NOT NULL,
+    monto NUMERIC(15, 2) NOT NULL,
+    fecha_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    codigo_unico VARCHAR(50) NOT NULL,
+    cuenta_id INTEGER NOT NULL,
+    CONSTRAINT fk_cuenta FOREIGN KEY (cuenta_id) REFERENCES cuenta(id)
+);
+
+-- Insertar registros en la tabla cuenta.
+INSERT INTO cuenta (saldo, numero_cuenta, tipo_cuenta) VALUES (1000.00, '1234567890', 'BASICA');
+INSERT INTO cuenta (saldo, numero_cuenta, tipo_cuenta) VALUES (2000.00, '1234567891', 'PREMIUM');
+INSERT INTO cuenta (saldo, numero_cuenta, tipo_cuenta) VALUES (1500.00, '1234567892', 'BASICA');
+INSERT INTO cuenta (saldo, numero_cuenta, tipo_cuenta) VALUES (2500.00, '1234567893', 'PREMIUM');
+INSERT INTO cuenta (saldo, numero_cuenta, tipo_cuenta) VALUES (3000.00, '1234567894', 'BASICA');
+
+-- Insertar registros en la tabla transaccion
+INSERT INTO transaccion (tipo, monto, codigo_unico, cuenta_id) VALUES ('DEPOSITO_SUCURSAL', 100.00, 'TX-1', 1);
+INSERT INTO transaccion (tipo, monto, codigo_unico, cuenta_id) VALUES ('COMPRA_FISICA', 50.00, 'TX-2', 2);
+INSERT INTO transaccion (tipo, monto, codigo_unico, cuenta_id) VALUES ('RETIRO_CAJERO', 20.00, 'TX-3', 3);
+INSERT INTO transaccion (tipo, monto, codigo_unico, cuenta_id) VALUES ('COMPRA_WEB', 30.00, 'TX-4', 4);
+INSERT INTO transaccion (tipo, monto, codigo_unico, cuenta_id) VALUES ('DEPOSITO_OTRA_CUENTA', 200.00, 'TX-5', 5);
+
+-- Verificar información de las tablas.
+SELECT * FROM cuenta;
+SELECT * FROM transaccion;
